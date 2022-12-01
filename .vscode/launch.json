@@ -19,13 +19,14 @@
             "cwd": "${fileDirname}",            
 
             "script": "${file}",
-            "debugPort": "49378"
+            "debugPort": "49378",
+            "waitLaunchTime": 5000
         },
         {
             "name": "w/ mini input",
-            "type": "Ruby",
+            "type": "rdbg",
             "request": "launch",
-            "program": "${file}",
+            "script": "${file}",
             "cwd": "${fileDirname}",            
             "args": [ 
                 "${fileDirname}/input_mini.txt"
@@ -33,9 +34,9 @@
         },    
         {
             "name": "w/ full input",
-            "type": "Ruby",
+            "type": "rdbg",
             "request": "launch",
-            "program": "${file}",
+            "script": "${file}",
             "cwd": "${fileDirname}",
             
             "args": [ 
