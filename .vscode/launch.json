@@ -20,14 +20,16 @@
 
             "script": "${file}",
             "debugPort": "49378",
-            "waitLaunchTime": 5000
+            "waitLaunchTime": 2000
         },
         {
             "name": "w/ mini input",
             "type": "rdbg",
             "request": "launch",
             "script": "${file}",
-            "cwd": "${fileDirname}",            
+            "cwd": "${fileDirname}",       
+            "debugPort": "49378",    
+            "waitLaunchTime": 2000, 
             "args": [ 
                 "${fileDirname}/input_mini.txt"
             ]
@@ -38,7 +40,8 @@
             "request": "launch",
             "script": "${file}",
             "cwd": "${fileDirname}",
-            
+            "debugPort": "49378",  
+            "waitLaunchTime": 2000,            
             "args": [ 
                 "${fileDirname}/input.txt"
             ]
