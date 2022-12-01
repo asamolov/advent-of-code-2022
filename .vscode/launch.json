@@ -1,0 +1,46 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+
+    {
+        "type": "rdbg",
+        "name": "Attach rdbg",
+        "request": "attach",
+        "debugPort": "49378"
+    },
+    
+        {
+            "name": "Debug Local File",
+            "type": "rdbg",
+            "request": "launch",
+            "cwd": "${fileDirname}",            
+
+            "script": "${file}",
+            "debugPort": "49378"
+        },
+        {
+            "name": "w/ mini input",
+            "type": "Ruby",
+            "request": "launch",
+            "program": "${file}",
+            "cwd": "${fileDirname}",            
+            "args": [ 
+                "${fileDirname}/input_mini.txt"
+            ]
+        },    
+        {
+            "name": "w/ full input",
+            "type": "Ruby",
+            "request": "launch",
+            "program": "${file}",
+            "cwd": "${fileDirname}",
+            
+            "args": [ 
+                "${fileDirname}/input.txt"
+            ]
+        }
+    ]
+}

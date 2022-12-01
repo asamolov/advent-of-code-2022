@@ -1,0 +1,17 @@
+require './Greeter'
+
+def hi(name = "World")
+    puts "Hello there, #{name}!"
+end
+
+
+hi("Alice")
+hi "Bob"
+hi "Mallory" "x"
+hi
+
+
+g = Greeter.new("Alex")
+
+g.say_hi
+g.say_bye
