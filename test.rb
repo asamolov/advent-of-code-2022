@@ -15,3 +15,5 @@ g = Greeter.new("Alex")
 
 g.say_hi
 g.say_bye
+
+puts ('a'..'z').to_a
