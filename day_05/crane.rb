@@ -48,7 +48,7 @@ IO.readlines(file, chomp: true).each do |line|
         command = /move (?<n>\d+) from (?<from>\d+) to (?<to>\d+)/.match(line)
         from = stacks[command[:from].to_i - 1]
         to   = stacks[command[:to].to_i   - 1]
-        temp = from.pop(command[:n].to_i).reverse
+        temp = from.pop(command[:n].to_i)#.reverse # uncomment for part 1
         p temp
         to.concat(temp)
         p stacks
