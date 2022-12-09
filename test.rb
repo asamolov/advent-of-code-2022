@@ -17,3 +17,9 @@ g.say_hi
 g.say_bye
 
 puts ('a'..'z').to_a
+
+h = {:a => {:b => {:c=> 1}}}
+
+p h.dig(:a, :b, :c)
+path = [:a, :b, :c]
+p h.dig(*path)
