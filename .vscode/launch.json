@@ -45,6 +45,18 @@
             "args": [ 
                 "${fileDirname}/input.txt"
             ]
+        },
+        {
+            "name": "w/ midi input",
+            "type": "rdbg",
+            "request": "launch",
+            "script": "${file}",
+            "cwd": "${fileDirname}",       
+            "debugPort": "49378",    
+            "waitLaunchTime": 2000, 
+            "args": [ 
+                "${fileDirname}/input_midi.txt"
+            ]
         }
     ]
 }

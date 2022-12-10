@@ -5,8 +5,6 @@ file = ARGV[0]
 
 puts("Reading ", file)
 
-
-
 def move_tail(head, tail)
     if (head[0] - tail[0]).abs <= 1 &&
         (head[1] - tail[1]).abs <= 1
@@ -41,10 +39,16 @@ def move_tail(head, tail)
     return [row, col]
 end
 
-head = [0, 0]
-tail = [0, 0]
+def move_rope(rope)
+    (1...rope.size).each do |x|
+        rope[x] = move_tail(rope[x-1], rope[x])
+    end
+end
+
+rope = Array.new(10) {Array.new(2, 0)}
 tails = Set.new
-tails.add(tail)
+tails.add(rope.last)
+
 CMD = /(\w) (\d+)/
 
 
@@ -57,17 +61,16 @@ IO.readlines(file, chomp: true).each do |line|
     steps.times do 
         case direction
             when "L"
-                head[1] -= 1                
+                rope.first[1] -= 1                
             when "R"
-                head[1] += 1
+                rope.first[1] += 1
             when "U"
-                head[0] += 1
+                rope.first[0] += 1
             when "D"
-                head[0] -= 1
+                rope.first[0] -= 1
         end        
-        tail = move_tail(head, tail)
-        tails.add(tail)
-        #p tails
+        move_rope(rope)
+        tails.add(rope.last)
     end
 end
 
