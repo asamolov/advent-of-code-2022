@@ -23,3 +23,13 @@ h = {:a => {:b => {:c=> 1}}}
 p h.dig(:a, :b, :c)
 path = [:a, :b, :c]
 p h.dig(*path)
+
+
+e = (1..5).each
+
+p e.next
+
+loop do
+    x = e.next
+    puts "remaining #{x}"
+end
