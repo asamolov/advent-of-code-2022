@@ -6,13 +6,8 @@ file = ARGV[0]
 puts("Reading ", file)
 
 fs = {}
-
 path = []
 
-CD = /\$ cd (\S+)/
-LS = /\$ ls/
-DIR = /dir (\S+)/
-FILE = /(\d+) (\S+)/
 DISK_SIZE = 70000000
 UPDATE_SIZE = 30000000
 
@@ -33,8 +28,9 @@ end
 
 IO.readlines(file, chomp: true).each do |line|
     puts line
-    if m = line.match(CD)
-        dir = m[1]
+    case line
+    when /\$ cd (\S+)/
+        dir = $1
         if ".." == dir
             path.pop
         elsif "/" == dir
@@ -43,20 +39,20 @@ IO.readlines(file, chomp: true).each do |line|
             path.push(dir)
         end
         p path
-    elsif line.match?(LS)
+    when /\$ ls/
         # noop
         p path
-    elsif m = line.match(DIR)
+    when /dir (\S+)/ # dir
         # adding dir entry
-        dir = m[1]
+        dir = $1
         p fs
         p path
         parent = path.size == 0 ? fs : fs.dig(*path)
         parent[dir] = {} # new dir
         p fs
-    elsif m = line.match(FILE)
-        size = m[1].to_i
-        file = m[2]
+    when /(\d+) (\S+)/ # file
+        size = $1.to_i
+        file = $2
         parent = path.size == 0 ? fs : fs.dig(*path)
         parent[file] = size
         p parent
