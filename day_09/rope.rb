@@ -19,7 +19,7 @@ def move_tail(head, tail)
     ]
 end
 
-def move_rope(rope)
+def move_rope!(rope)
     (1...rope.size).each do |x|
         rope[x] = move_tail(rope[x-1], rope[x])
     end
@@ -39,19 +39,14 @@ IO.readlines(file, chomp: true).each do |line|
     
     steps.times do 
         case direction
-            when "L"
-                rope.first[1] -= 1                
-            when "R"
-                rope.first[1] += 1
-            when "U"
-                rope.first[0] += 1
-            when "D"
-                rope.first[0] -= 1
+            when "L" then rope.first[1] -= 1                
+            when "R" then rope.first[1] += 1
+            when "U" then rope.first[0] += 1
+            when "D" then rope.first[0] -= 1
         end        
-        move_rope(rope)
+        move_rope!(rope)
         tails.add(rope.last)
     end
 end
-
 
 puts "tail visited: #{tails.size}"
