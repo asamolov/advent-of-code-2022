@@ -12,21 +12,11 @@ def move_tail(head, tail)
         return tail
     end
 
-    # rewriten in single
-    row =
-    if head[0] == tail[0]
-        tail[0]
-    else
-        head[0] > tail[0] ? tail[0] + 1 : tail[0] - 1
-    end
-    col =
-    if head[1] == tail[1]
-        tail[1]
-    else
-        head[1] > tail[1] ? tail[1] + 1 : tail[1] - 1
-    end
-        
-    return [row, col]
+    # rewriten in single statement
+    return [
+        tail[0] + (head[0] <=> tail[0]),
+        tail[1] + (head[1] <=> tail[1])
+    ]
 end
 
 def move_rope(rope)
@@ -40,7 +30,6 @@ tails = Set.new
 tails.add(rope.last)
 
 CMD = /(\w) (\d+)/
-
 
 IO.readlines(file, chomp: true).each do |line|
     puts line
