@@ -11,16 +11,6 @@ def move_tail(head, tail)
         # head and tail are touching
         return tail
     end
-    if head[0] == tail[0] # moving horizontally
-        row = tail[0]
-        col = head[1] > tail[1] ? tail[1] + 1 : tail[1] - 1
-    elsif head[1] == tail[1] # moving vertically
-        row = head[0] > tail[0] ? tail[0] + 1 : tail[0] - 1
-        col = tail[1]
-    else # moving diagonally        
-        row = head[0] > tail[0] ? tail[0] + 1 : tail[0] - 1
-        col = head[1] > tail[1] ? tail[1] + 1 : tail[1] - 1
-    end
 
     # rewriten in single
     row =
