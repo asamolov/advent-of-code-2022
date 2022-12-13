@@ -24,6 +24,9 @@ p h.dig(:a, :b, :c)
 path = [:a, :b, :c]
 p h.dig(*path)
 
+p path.dig(1)
+p path.dig(-1)
+p path.dig(4)
 
 e = (1..5).each
 
