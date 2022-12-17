@@ -6,15 +6,17 @@ require 'io/console'
 file = ARGV[0]
 
 class Field
-    def initialize(paths, start = [500, 0])
+    def initialize(paths, with_floor = false, start = [500, 0])
         flat = paths.flatten(1)
         @cols = flat.minmax {|a, b| a[0] <=> b[0] }.map {|x| x[0]}
         @rows = flat.minmax {|a, b| a[1] <=> b[1] }.map {|x| x[1]}
         @rows[0] = 0 # rows start from zero
         @paths = paths
-        @field = Array.new(@rows[1] + 1) {Array.new(tr_col(@cols[1]) + 1, '.')}
 
-        @start = tr(start)
+        # use [col][row] addressing
+        @field = Hash.new { |hash, key| hash[key] = Array.new(@rows[1] + 1, '.') }
+
+        @start = start
         # fill field
         @field[@start[0]][@start[1]] = '+'
 
@@ -60,27 +62,27 @@ class Field
     end
 
     def overflow_bottom?
-        @sand[0] >= @rows[1]
+        @sand[1] >= @rows[1]
     end
     def overflow_left?
-        @sand[1] <= tr_col(@cols[0])
+        @sand[0] <= @cols[0]
     end
     def overflow_right?
-        @sand[1] >= tr_col(@cols[1])
+        @sand[0] >= @cols[1]
     end
 
     def move_down
-        if @field[@sand[0] + 1][@sand[1]] == '.'
-            @sand[0] += 1
+        if @field[@sand[0]][@sand[1] + 1] == '.'
+            @sand[1] += 1
             return true
         else
             return false
         end
     end
     def move_left
-        if @field[@sand[0] + 1][@sand[1] - 1] == '.'
-            @sand[0] += 1
-            @sand[1] -= 1
+        if @field[@sand[0] - 1][@sand[1] + 1] == '.'
+            @sand[1] += 1
+            @sand[0] -= 1
             return true
         else
             return false
@@ -88,8 +90,8 @@ class Field
     end
     def move_right
         if @field[@sand[0] + 1][@sand[1] + 1] == '.'
-            @sand[0] += 1
             @sand[1] += 1
+            @sand[0] += 1
             return true
         else
             return false
@@ -106,21 +108,13 @@ class Field
             t = a.dup
             delta = [b[0] <=> a[0], b[1] <=> a[1]]
             while t != b do
-                @field[t[1]][tr_col(t[0])] = '#'
+                @field[t[0]][t[1]] = '#'
                 t[0] += delta[0]
                 t[1] += delta[1]
             end
-            @field[b[1]][tr_col(b[0])] = '#'
+            @field[b[0]][b[1]] = '#'
         end
         b
-    end
-
-    def tr(pt)
-        [pt[1], tr_col(pt[0])]
-    end
-
-    def tr_col(col) #translates column index
-        col - @cols[0]
     end
 
     def to_s
@@ -134,9 +128,12 @@ class Field
             tmp = @field[@sand[0]][@sand[1]]
             @field[@sand[0]][@sand[1]] = '0'
         end
-        @field.each_index do |index|
-            row = @field[index]
-            io.puts "#{index.to_s.rjust(pad)} #{row.join("")}"
+        (@rows[0]..@rows[1]).each do |row|
+            io << "#{row.to_s.rjust(pad)} "
+            (@cols[0]..@cols[1]).each do |col|
+                io << @field[col][row]
+            end
+            io << "\n"
         end
         if @sand != nil
             @field[@sand[0]][@sand[1]] = tmp
