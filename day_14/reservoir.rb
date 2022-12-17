@@ -10,11 +10,22 @@ class Field
         flat = paths.flatten(1)
         @cols = flat.minmax {|a, b| a[0] <=> b[0] }.map {|x| x[0]}
         @rows = flat.minmax {|a, b| a[1] <=> b[1] }.map {|x| x[1]}
+        @with_floor = with_floor
         @rows[0] = 0 # rows start from zero
+        if @with_floor
+            @rows[1] += 2
+        end
         @paths = paths
 
         # use [col][row] addressing
-        @field = Hash.new { |hash, key| hash[key] = Array.new(@rows[1] + 1, '.') }
+        @field = Hash.new do |hash, key|
+            new_row = Array.new(@rows[1] + 1, '.')
+            if @with_floor
+                new_row[@rows[1]] = '#'
+            end
+
+            hash[key] = new_row
+        end
 
         @start = start
         # fill field
@@ -32,23 +43,36 @@ class Field
 
     def step
         if @sand == nil
+            if source_blocked?
+                return 'end'
+            end
             @sand = @start.dup
         end
 
         if overflow_bottom?
             return 'end' # reached end
-        end        
+        end
         if move_down
             return 'next_step'
         end
         if overflow_left?
-            return 'end' # reached end
+            if @with_floor
+                # extend field left
+                @cols[0] -= 1
+            else
+                return 'end' # reached end
+            end
         end
         if move_left
             return 'next_step'
         end
         if overflow_right?
-            return 'end' # reached end
+            if @with_floor
+                # extend field right
+                @cols[1] += 1
+            else
+                return 'end' # reached end
+            end
         end
         if move_right
             return 'next_step'
@@ -61,6 +85,9 @@ class Field
         return 'next_sand'
     end
 
+    def source_blocked?
+        @field[@start[0]][@start[1]] == 'o'
+    end
     def overflow_bottom?
         @sand[1] >= @rows[1]
     end
@@ -163,7 +190,7 @@ end
 
 #paths.each {|path| p path}
 
-f = Field.new(paths)
+f = Field.new(paths, with_floor = true)
 
 puts f
 
@@ -177,11 +204,16 @@ loop do
     res = f.step
     case res
         when 'end'
-            break
-        when 'next_sand'
             $stdout.clear_screen 
             puts res
             puts f
+            break
+        when 'next_sand'
+            if f.counter % 100 == 0
+                $stdout.clear_screen 
+                puts res
+                puts f
+            end
             stop_next_sand = false
     end
     if stop_next_sand || stop_at_end
